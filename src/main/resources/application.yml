@@ -1,0 +1,13 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: PizzaDelivery
+  data:
+    mongodb:
+      host: ac-anmz1er-shard-00-02.wnbvdih.mongodb.net
+      port: 27017
+      username: ransuum
+      uri: mongodb+srv://ransuum:82232@atlascluster.wnbvdih.mongodb.net/
+
