@@ -8,3 +8,10 @@ spring:
     mongodb:
       uri: mongodb+srv://ransuum:82232@atlascluster.wnbvdih.mongodb.net/PizzaDelivery?retryWrites=true&w=majority
       database: PizzaDelivery
+
+app:
+  frontend-domain: http://localhost:3000
+  security:
+    jwt:
+      token:
+        secret-key: your-secret-key-here
