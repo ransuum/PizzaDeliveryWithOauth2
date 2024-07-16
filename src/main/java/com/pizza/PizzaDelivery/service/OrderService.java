@@ -34,9 +34,9 @@ public class OrderService {
 
         Order order = Order.builder()
                 .userInfo(Order.UserInfo.builder()
-                        .name(orderRequest.getUserInfo().getName() != null ? orderRequest.getUserInfo().getName() : authenticatedUser.getName())
-                        .phone(orderRequest.getUserInfo().getPhone() != null ? orderRequest.getUserInfo().getPhone() : authenticatedUser.getPhone())
-                        .email(orderRequest.getUserInfo().getEmail() != null ? orderRequest.getUserInfo().getEmail() : authenticatedUser.getEmail())
+                        .name(authenticatedUser.getName())
+                        .phone(authenticatedUser.getPhone())
+                        .email(authenticatedUser.getEmail())
                         .build())
                 .userId(authenticatedUser.getId())
                 .comments(orderRequest.getComments())

@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.format.annotation.NumberFormat;
 
 @AllArgsConstructor
 @Data
@@ -24,4 +25,12 @@ public class SignUpRequest {
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&_-])[A-Za-z\\d@$!%*#?&_-]+$",
             message = "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character")
     private String password;
+
+    @Valid
+    @NotBlank(message = "name is blank")
+    private String name;
+
+    @Valid
+    @Pattern(regexp = "^\\+?[0-9. ()-]{7,25}$", message = "Invalid phone number")
+    private String phone;
 }

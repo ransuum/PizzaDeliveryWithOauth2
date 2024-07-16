@@ -9,6 +9,8 @@ import com.pizza.PizzaDelivery.mapper.MapperForDto;
 import com.pizza.PizzaDelivery.repo.UsersRepo;
 import com.pizza.PizzaDelivery.security.TokenProvider;
 import com.pizza.PizzaDelivery.service.UsersService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/auth")
+@Tag(name = "Users Controller")
 public class UsersController {
 
     private final UsersService usersService;
@@ -39,11 +42,13 @@ public class UsersController {
     }
 
     @PostMapping("/register")
+    @Operation(summary = "Registry")
     public ResponseEntity<UsersDto> registerUser(@RequestBody @Valid SignUpRequest sign){
         return new ResponseEntity<>(mapper.userToDto(usersService.signUp(sign)), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
+    @Operation(summary = "login")
     public ResponseEntity<?> login(@RequestBody @Valid SignInRequest sign, HttpServletResponse httpServletResponse) throws NotFoundException {
         Users users = usersRepo.findUserByEmail(sign.getEmail())
                 .orElseThrow(()-> new NotFoundException("user with this email not found"));
@@ -55,6 +60,7 @@ public class UsersController {
     }
 
     @DeleteMapping("/logout")
+    @Operation(summary = "logout")
     public ResponseEntity<?> logout(HttpServletResponse httpServletResponse) {
         usersService.logout(httpServletResponse);
         return ResponseEntity.ok("Logout");
