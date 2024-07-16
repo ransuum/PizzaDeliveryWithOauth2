@@ -1,49 +1,35 @@
-package com.pizza.PizzaDelivery.entity;
+package com.pizza.PizzaDelivery.entity.dto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import com.pizza.PizzaDelivery.entity.Order;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Document("order")
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 @Builder
-public class Order {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(nullable = false, updatable = false)
+public class OrderDto {
     private String id;
 
-    private UserInfo userInfo;
+    private Order.UserInfo userInfo;
     private String userId;
     private String comments;
-    private List<AdditionalOrderItem> additionalOrder = new ArrayList<>();
-    private List<MainOrderItem> mainOrder = new ArrayList<>();
+    private List<Order.AdditionalOrderItem> additionalOrder = new ArrayList<>();
+    private List<Order.MainOrderItem> mainOrder = new ArrayList<>();
     private String paymentMethod;
     private String payStatus;
     private Double totalPrice;
     private String userAddress;
     private String change;
     private String status;
-
-    @CreatedDate
     private LocalDateTime createdAt;
-
-    @LastModifiedDate
     private ZonedDateTime updatedAt;
 
     @Data
@@ -82,7 +68,7 @@ public class Order {
         private String category;
         private Integer quantity;
         private String info;
-        private List<AdditionalOrderItem> additiveItems = new ArrayList<>();
+        private List<Order.AdditionalOrderItem> additiveItems = new ArrayList<>();
         private String additiveItemsInfo;
     }
 }

@@ -28,14 +28,15 @@ public class UsersService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        var user = usersRepo.findByEmail(email);
-        return user;
+        return usersRepo.findByEmail(email);
     }
 
     public Users signUp(SignUpRequest data) throws InvalidJwtException {
+
         if (usersRepo.findByEmail(data.getEmail()) != null) {
             throw new InvalidJwtException("Email already exists");
         }
+
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.getPassword());
         Users newUser = new Users(data.getEmail(), encryptedPassword);
         newUser.setCreatedAt(Instant.now());
