@@ -27,7 +27,8 @@ public class Users implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(nullable = false, updatable = false)
-    private UUID id;
+    private String id;
+
     private String name;
 
     @Column(unique = true, nullable = false)
@@ -35,6 +36,11 @@ public class Users implements UserDetails {
 
     private Boolean isAdmin;
     private String password;
+
+    public Users(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -6,10 +6,7 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.pizza.PizzaDelivery.entity.Users;
 import jakarta.servlet.http.Cookie;
-import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -18,11 +15,9 @@ import java.time.ZoneOffset;
 import java.util.Date;
 
 @Service
-@Getter
 public class TokenProvider {
-    @Autowired
-    private Environment env;
-    @Value("frontend.domain")
+
+    @Value("${frontend.domain}")
     private String frontEndDomain;
 
     @Value("${security.jwt.token.secret-key:secret-key}")
