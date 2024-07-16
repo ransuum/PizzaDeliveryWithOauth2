@@ -5,18 +5,16 @@ import com.pizza.PizzaDelivery.entity.Users;
 import com.pizza.PizzaDelivery.entity.request.OrderRequest;
 import com.pizza.PizzaDelivery.entity.request.UpdatePaymentRequest;
 import com.pizza.PizzaDelivery.entity.request.UpdateStatusRequest;
-import com.pizza.PizzaDelivery.entity.response.MessageResponse;
 import com.pizza.PizzaDelivery.exception.NotFoundException;
 import com.pizza.PizzaDelivery.repo.OrderRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class OrderService {
@@ -56,14 +54,8 @@ public class OrderService {
         return orderRepo.save(order);
     }
 
-    public ResponseEntity<?> getOrders() {
-        try {
-            return ResponseEntity.ok(orderRepo.findAll(Sort.by(Sort.Direction.DESC, "createdAt")));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new MessageResponse("INTERNAL SERVER ERROR"));
-        }
+    public List<Order> getOrders() {
+            return orderRepo.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
     }
 
     public Order getOrderById(String id) {
