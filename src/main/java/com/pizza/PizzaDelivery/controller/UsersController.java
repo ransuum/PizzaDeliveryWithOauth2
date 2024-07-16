@@ -10,15 +10,13 @@ import com.pizza.PizzaDelivery.repo.UsersRepo;
 import com.pizza.PizzaDelivery.security.TokenProvider;
 import com.pizza.PizzaDelivery.service.UsersService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -41,12 +39,12 @@ public class UsersController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UsersDto> registerUser(@RequestBody SignUpRequest sign){
+    public ResponseEntity<UsersDto> registerUser(@RequestBody @Valid SignUpRequest sign){
         return new ResponseEntity<>(mapper.userToDto(usersService.signUp(sign)), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody SignInRequest sign, HttpServletResponse httpServletResponse) throws NotFoundException {
+    public ResponseEntity<?> login(@RequestBody @Valid SignInRequest sign, HttpServletResponse httpServletResponse) throws NotFoundException {
         Users users = usersRepo.findUserByEmail(sign.getEmail())
                 .orElseThrow(()-> new NotFoundException("user with this email not found"));
 
@@ -54,5 +52,11 @@ public class UsersController {
         var authUser = authenticationManager.authenticate(usernamePassword);
         httpServletResponse.addCookie(tokenProvider.generateAuthorizationCookie(users));
         return ResponseEntity.ok("Authorize");
+    }
+
+    @DeleteMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletResponse httpServletResponse) {
+        usersService.logout(httpServletResponse);
+        return ResponseEntity.ok("Logout");
     }
 }
