@@ -1,2 +1,9 @@
-package com.pizza.PizzaDelivery.enums;public enum AdditonalItem {
+package com.pizza.PizzaDelivery.enums;
+
+public enum AdditionalItem {
+    KETCHUP,
+    FRIES,
+    FANTA,
+    SPRITE,
+    SHAKE
 }

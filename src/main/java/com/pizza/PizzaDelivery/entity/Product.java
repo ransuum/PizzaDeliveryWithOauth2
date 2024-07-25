@@ -1,40 +1,44 @@
 package com.pizza.PizzaDelivery.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.pizza.PizzaDelivery.enums.AdditionalItem;
+import com.pizza.PizzaDelivery.enums.CategoryForPizza;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.Instant;
 
-@Document("product")
+//@Document("product") MONGO
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
+@Table(name = "product")
+@Entity
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(nullable = false, updatable = false)
     private String id;
 
-    @Indexed(unique = true)
-    private String name;
+    @Enumerated(EnumType.STRING)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private CategoryForPizza categoryForPizza;
 
-    private String category;
+    @Enumerated(EnumType.STRING)
+    private AdditionalItem additionalItem;
+
     private String description;
     private Double price;
     private String info;
     private String image;
-    @Builder.Default
+
     private Integer discount = 0;
 
     @CreatedDate

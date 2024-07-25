@@ -1,16 +1,12 @@
 package com.pizza.PizzaDelivery.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,11 +16,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Document("users")
+//@Document("users")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
+@Entity
+@org.springframework.data.relational.core.mapping.Table(name = "users")
 public class Users implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -32,7 +30,9 @@ public class Users implements UserDetails {
     private String id;
 
     @Column(nullable = false)
-    private String name;
+    private String firstName;
+    @Column(nullable = false)
+    private String lastName;
 
     private String phone;
 
@@ -46,6 +46,12 @@ public class Users implements UserDetails {
 
     @CreatedDate
     private Instant createdAt;
+
+    private String address;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    private List<Orders> orders = new ArrayList<>();
 
     @LastModifiedDate
     private Instant updatedAt;

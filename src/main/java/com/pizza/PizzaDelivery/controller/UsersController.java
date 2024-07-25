@@ -21,7 +21,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/auth")
 @Tag(name = "Users Controller")
 public class UsersController {
 
@@ -64,5 +64,10 @@ public class UsersController {
     public ResponseEntity<?> logout(HttpServletResponse httpServletResponse) {
         usersService.logout(httpServletResponse);
         return ResponseEntity.ok("Logout");
+    }
+
+    @DeleteMapping("/log")
+    public void log(HttpServletResponse httpServletResponse) {
+        httpServletResponse.reset();
     }
 }

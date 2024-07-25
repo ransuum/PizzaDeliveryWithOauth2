@@ -2,8 +2,6 @@ package com.pizza.PizzaDelivery.controller;
 
 import com.pizza.PizzaDelivery.entity.dto.OrderDto;
 import com.pizza.PizzaDelivery.entity.request.OrderRequest;
-import com.pizza.PizzaDelivery.entity.request.UpdatePaymentRequest;
-import com.pizza.PizzaDelivery.entity.request.UpdateStatusRequest;
 import com.pizza.PizzaDelivery.mapper.MapperForDto;
 import com.pizza.PizzaDelivery.service.OrderService;
 import jakarta.validation.Valid;
@@ -40,15 +38,5 @@ public class OrderController {
     @GetMapping("/{id}")
     public ResponseEntity<OrderDto> getOrderById(@PathVariable String id) {
         return new ResponseEntity<>(orderMapper.orderToDto(orderService.getOrderById(id)), HttpStatus.FOUND);
-    }
-
-    @PutMapping("/{id}/update-order-status")
-    public ResponseEntity<OrderDto> updateOrderStatus(@PathVariable String id, @RequestBody @Valid UpdateStatusRequest updateStatusRequest) {
-        return new ResponseEntity<>(orderMapper.orderToDto(orderService.updateOrderStatus(id, updateStatusRequest)), HttpStatus.OK);
-    }
-
-    @PutMapping("/{id}/update-Order-Payment")
-    public ResponseEntity<OrderDto> updateOrderPayment(@PathVariable String id, @RequestBody @Valid UpdatePaymentRequest updatePaymentRequest) {
-        return new ResponseEntity<>(orderMapper.orderToDto(orderService.updateOrderPayment(id, updatePaymentRequest)), HttpStatus.OK);
     }
 }

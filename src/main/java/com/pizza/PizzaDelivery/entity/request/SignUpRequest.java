@@ -1,5 +1,6 @@
 package com.pizza.PizzaDelivery.entity.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -27,10 +28,24 @@ public class SignUpRequest {
     private String password;
 
     @Valid
-    @NotBlank(message = "name is blank")
-    private String name;
+    @NotBlank(message = "firstname is blank")
+    @Pattern(regexp = "^[\\p{L}\\p{M} ,.'-]+$", message = "Incorrect first name")
+    @JsonProperty("first_name")
+    private String firstname;
+
+    @Valid
+    @NotBlank(message = "lastname is blank")
+    @Pattern(regexp = "^[\\p{L}\\p{M} ,.'-]+$", message = "Incorrect last name")
+    @JsonProperty("last_name")
+    private String lastname;
+
+    @Valid
+    @NotBlank(message = "address is blank")
+    @JsonProperty("address")
+    private String address;
 
     @Valid
     @Pattern(regexp = "^\\+?[0-9. ()-]{7,25}$", message = "Invalid phone number")
+    @JsonProperty("phone")
     private String phone;
 }

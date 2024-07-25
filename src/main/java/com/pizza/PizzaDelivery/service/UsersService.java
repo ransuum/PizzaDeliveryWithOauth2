@@ -40,7 +40,8 @@ public class UsersService implements UserDetailsService {
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.getPassword());
         Users newUser = new Users(data.getEmail(), encryptedPassword);
         newUser.setCreatedAt(Instant.now());
-        newUser.setName(data.getName());
+        newUser.setFirstName(data.getFirstname());
+        newUser.setLastName(data.getLastname());
         newUser.setPhone(data.getPhone());
         return usersRepo.save(newUser);
     }

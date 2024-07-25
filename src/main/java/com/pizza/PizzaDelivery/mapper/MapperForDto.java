@@ -1,11 +1,7 @@
 package com.pizza.PizzaDelivery.mapper;
 
-import com.pizza.PizzaDelivery.entity.Order;
-import com.pizza.PizzaDelivery.entity.Product;
-import com.pizza.PizzaDelivery.entity.Users;
-import com.pizza.PizzaDelivery.entity.dto.OrderDto;
-import com.pizza.PizzaDelivery.entity.dto.ProductDto;
-import com.pizza.PizzaDelivery.entity.dto.UsersDto;
+import com.pizza.PizzaDelivery.entity.*;
+import com.pizza.PizzaDelivery.entity.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -20,12 +16,20 @@ public class MapperForDto {
         return mapper.map(users, UsersDto.class);
     }
 
-    public OrderDto orderToDto(Order order){
-        return mapper.map(order, OrderDto.class);
+    public OrderDto orderToDto(Orders orders){
+        return mapper.map(orders, OrderDto.class);
     }
 
     public ProductDto productToDto(Product product){
         return mapper.map(product, ProductDto.class);
+    }
+
+    public MainOrderItemDto mainOrderItemToDto(MainOrderItem mainOrderItem){
+        return mapper.map(mainOrderItem, MainOrderItemDto.class);
+    }
+
+    public AdditionalItemDto additionalItemToDto(AdditionalOrderItem additionalItem){
+        return mapper.map(additionalItem, AdditionalItemDto.class);
     }
 
 }

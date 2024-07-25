@@ -3,8 +3,10 @@ package com.pizza.PizzaDelivery.util;
 import com.pizza.PizzaDelivery.enums.AdditionalItem;
 import com.pizza.PizzaDelivery.enums.CategoryForPizza;
 import com.pizza.PizzaDelivery.exception.NotFoundException;
+import org.springframework.stereotype.Component;
 
-public class PriceOnPizza {
+@Component
+public class Price {
 
     public Double priceOnPizza(CategoryForPizza pizzaName) {
         return switch (pizzaName) {
