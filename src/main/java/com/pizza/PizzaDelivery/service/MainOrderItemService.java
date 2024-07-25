@@ -58,6 +58,7 @@ public class MainOrderItemService {
                 .createdAt(LocalDateTime.now())
                 .build();
 
+        orders.setTotalPrice(orders.getTotalPrice() + mainOrderItem.getPrice());
         orders.getMainOrderItem().add(mainOrderItem);
         orderRepo.save(orders);
 
@@ -71,6 +72,7 @@ public class MainOrderItemService {
         mainOrderItemRepo.deleteById(id);
 
         orderRepo.findById(mainOrderItem.getOrders().getId()).ifPresent(order -> {
+            order.setTotalPrice(order.getTotalPrice() - mainOrderItem.getPrice());
             order.getMainOrderItem().remove(mainOrderItem);
             orderRepo.save(order);
         });
@@ -81,6 +83,7 @@ public class MainOrderItemService {
     public MainOrderItem updateMainOrderItem(String id, String descr, String productId, Integer quantity) {
         MainOrderItem mainOrderItem = mainOrderItemRepo.findById(id).orElseThrow(()
                 -> new NotFoundException("Cannot find orders item by this id:" + id));
+        Orders orders = mainOrderItem.getOrders();
 
         if (descr != null && !descr.trim().isEmpty() && !descr.trim().isBlank()) {
             mainOrderItem.setDescr(descr);
@@ -91,9 +94,14 @@ public class MainOrderItemService {
             mainOrderItem.setUpdated(Boolean.TRUE);
         }
         if (quantity != null && quantity > 0 && !quantity.equals(mainOrderItem.getQuantity())) {
+            orders.setTotalPrice(orders.getTotalPrice() - mainOrderItem.getPrice());
+
             mainOrderItem.setQuantity(quantity);
             mainOrderItem.setPrice(quantity * pizza.priceOnPizza(mainOrderItem.getProduct().getCategoryForPizza()));
             mainOrderItem.setUpdated(Boolean.TRUE);
+
+            orders.setTotalPrice(orders.getTotalPrice() + mainOrderItem.getPrice());
+            orderRepo.save(orders);
         }
         return mainOrderItemRepo.save(mainOrderItem);
     }
