@@ -58,7 +58,7 @@ public class MainOrderItemService {
                 .createdAt(LocalDateTime.now())
                 .build();
 
-        orders.getMainOrder().add(mainOrderItem);
+        orders.getMainOrderItem().add(mainOrderItem);
         orderRepo.save(orders);
 
         return mainOrderItemRepo.save(mainOrderItem);
@@ -71,7 +71,7 @@ public class MainOrderItemService {
         mainOrderItemRepo.deleteById(id);
 
         orderRepo.findById(mainOrderItem.getOrders().getId()).ifPresent(order -> {
-            order.getMainOrder().remove(mainOrderItem);
+            order.getMainOrderItem().remove(mainOrderItem);
             orderRepo.save(order);
         });
 
@@ -105,7 +105,7 @@ public class MainOrderItemService {
         Orders orders = orderRepo.findByUserInfo(users)
                 .orElseThrow(() -> new NotFoundException("Cannot find orders item by this email:" + users.getEmail()));
 
-        return orders.getMainOrder();
+        return orders.getMainOrderItem();
     }
 
     public List<MainOrderItem> findAllMainOrderItemsByUserAndFilter(Double price, String before, String after,
@@ -116,7 +116,7 @@ public class MainOrderItemService {
         Orders orders = orderRepo.findByUserInfo(users)
                 .orElseThrow(() -> new NotFoundException("Cannot find orders item by this email:" + users.getEmail()));
 
-        List<MainOrderItem> mainOrderItems = orders.getMainOrder();
+        List<MainOrderItem> mainOrderItems = orders.getMainOrderItem();
 
         if (price != null && price > 0) {
             mainOrderItems = mainOrderItems.stream().filter(mainOrderItem -> mainOrderItem.getPrice().equals(price)).toList();

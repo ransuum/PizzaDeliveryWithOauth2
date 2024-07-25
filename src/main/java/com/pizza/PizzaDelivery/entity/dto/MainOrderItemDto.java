@@ -22,9 +22,8 @@ public class MainOrderItemDto {
     private Double price;
     private String descr;
     private Orders orders;
-    private CategoryForPizza category;
     private Boolean updated;
     private Integer quantity;
-    private List<AdditionalOrderItem> additiveItems = new ArrayList<>();
+    private List<AdditionalOrderItem> additionalOrderItem = new ArrayList<>();
     private LocalDateTime createdAt;
 }

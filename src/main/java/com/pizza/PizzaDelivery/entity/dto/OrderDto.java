@@ -21,11 +21,9 @@ public class OrderDto {
     private UserInfoDto userInfo;
     private String comments;
     private PaymentMethod paymentMethod;
-    private List<MainOrderItem> orderItems = new ArrayList<>();
+    private List<MainOrderItem> mainOrderItem = new ArrayList<>();
     private PayStatus payStatus;
     private Double totalPrice;
-    private String userAddress;
     private Boolean change;
-    private String status;
     private LocalDateTime createdAt;
 }

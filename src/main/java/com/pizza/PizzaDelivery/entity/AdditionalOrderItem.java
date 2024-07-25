@@ -1,5 +1,8 @@
 package com.pizza.PizzaDelivery.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +19,7 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 @org.springframework.data.relational.core.mapping.Table(name = "additional_item_order")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class AdditionalOrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -31,7 +35,7 @@ public class AdditionalOrderItem {
 //    @JsonIgnore
 //    @DBRef
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "mainOrderItem_id", referencedColumnName = "id")
+    @JoinColumn(name = "main_order_item_id", referencedColumnName = "id")
     private MainOrderItem mainOrderItem;
     //    @JsonIgnore
     //    @DBRef                    MONGO
@@ -40,7 +44,7 @@ public class AdditionalOrderItem {
     private Product product;
 
     @Column(nullable = false)
-    private Integer quantity = 0;
+    private Integer quantity;
 
     @CreatedDate
     private LocalDateTime createdAt;

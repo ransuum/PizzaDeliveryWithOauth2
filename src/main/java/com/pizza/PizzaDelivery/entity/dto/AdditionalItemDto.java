@@ -19,6 +19,6 @@ public class AdditionalItemDto {
     private Double price;
     private MainOrderItem mainOrderItem;
     private Product product;
-    private Integer quantity = 0;
+    private Integer quantity;
     private LocalDateTime createdAt;
 }

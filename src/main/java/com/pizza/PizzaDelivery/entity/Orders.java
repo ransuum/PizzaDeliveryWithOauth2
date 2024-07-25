@@ -1,8 +1,12 @@
 package com.pizza.PizzaDelivery.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.pizza.PizzaDelivery.entity.dto.UserInfoDto;
 import com.pizza.PizzaDelivery.enums.PayStatus;
 import com.pizza.PizzaDelivery.enums.PaymentMethod;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +27,8 @@ import java.util.List;
 @Builder
 @Entity
 @org.springframework.data.relational.core.mapping.Table(name = "orders")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@Schema(description = "Model")
 public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -36,7 +42,8 @@ public class Orders {
     private String comments;
 
     @OneToMany(mappedBy = "orders")
-    private List<MainOrderItem> mainOrder = new ArrayList<>();
+    @Schema(description = "List of main orders")
+    private List<MainOrderItem> mainOrderItem = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;

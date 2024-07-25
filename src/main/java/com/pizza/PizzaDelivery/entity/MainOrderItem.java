@@ -1,5 +1,9 @@
 package com.pizza.PizzaDelivery.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,16 +22,19 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "main_order_item")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class MainOrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(nullable = false, updatable = false)
+    @Schema(description = "Unique identifier of the order item", example = "123e4567-e89b-12d3-a456-426614174000")
     private String id;
 
     @Column(nullable = false)
     private String image;
 
     @Column(nullable = false)
+    @Schema(description = "Price", example = "15.99")
     private Double price;
 
     @Column(nullable = false)
@@ -46,6 +53,7 @@ public class MainOrderItem {
     private Boolean updated;
 
     @Column(nullable = false)
+    @Schema(description = "Quantity", example = "2")
     private Integer quantity = 0;
 
     @OneToMany(mappedBy = "mainOrderItem", fetch = FetchType.LAZY)

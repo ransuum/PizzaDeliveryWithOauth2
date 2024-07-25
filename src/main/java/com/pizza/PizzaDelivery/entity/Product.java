@@ -1,6 +1,8 @@
 package com.pizza.PizzaDelivery.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.pizza.PizzaDelivery.enums.AdditionalItem;
 import com.pizza.PizzaDelivery.enums.CategoryForPizza;
 import jakarta.persistence.*;
@@ -21,6 +23,7 @@ import java.time.Instant;
 @Builder
 @Table(name = "product")
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
