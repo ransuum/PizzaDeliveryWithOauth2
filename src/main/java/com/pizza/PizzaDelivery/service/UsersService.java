@@ -43,6 +43,7 @@ public class UsersService implements UserDetailsService {
         newUser.setFirstName(data.getFirstname());
         newUser.setLastName(data.getLastname());
         newUser.setPhone(data.getPhone());
+        newUser.setAddress(data.getAddress());
         return usersRepo.save(newUser);
     }
 
