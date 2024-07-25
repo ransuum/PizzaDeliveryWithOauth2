@@ -8,7 +8,7 @@ services:
     env_file:
       - .env
     environment:
-      - JDBC_URI=${JDBC_URI}
+      - JDBC_URI=jdbc:postgresql://ep-summer-moon-a2hy2sb4.eu-central-1.pg.koyeb.app/koyebdb?user=koyeb-adm&password=rKiT2n3xgGoU
     ports:
       - "8081:8081"
 
