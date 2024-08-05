@@ -21,7 +21,7 @@ import java.util.List;
 @Data
 @Builder
 @Entity
-@org.springframework.data.relational.core.mapping.Table(name = "users")
+@org.springframework.data.relational.core.mapping.Table(name = "users_oauth")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Users {
     @Id
@@ -31,6 +31,7 @@ public class Users {
 
     @Column(nullable = false)
     private String firstName;
+
     @Column(nullable = false)
     private String lastName;
 

@@ -26,7 +26,7 @@ import java.util.List;
 @Data
 @Builder
 @Entity
-@org.springframework.data.relational.core.mapping.Table(name = "orders")
+@org.springframework.data.relational.core.mapping.Table(name = "orders_oauth")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Schema(description = "Model")
 public class Orders {

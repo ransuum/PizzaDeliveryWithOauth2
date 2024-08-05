@@ -15,6 +15,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,6 +40,7 @@ public class MainOrderItemController {
             @ApiResponse(responseCode = "400", description = "Invalid request"),
             @ApiResponse(responseCode = "404", description = "Product or order not found")
     })
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<MainOrderItemDto> create(@Valid @RequestBody MainOrderItemRequest mainOrderItemRequest) {
         return new ResponseEntity<>(mapperForDto.mainOrderItemToDto(mainOrderItemService
                 .createMainOrderItem(mainOrderItemRequest)), HttpStatus.CREATED);
@@ -46,6 +48,7 @@ public class MainOrderItemController {
 
     @PutMapping
     @Operation(summary = "Update an order item", description = "Updates an order item based on the provided data")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<MainOrderItemDto> update(@RequestParam String id,
                                                    @RequestParam(required = false) String descr,
                                                    @RequestParam(required = false) String productId,
@@ -55,6 +58,7 @@ public class MainOrderItemController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN', 'ROLE_USER')")
     @Operation(summary = "Delete an order item", description = "Deletes an order item based on the id")
     public ResponseEntity<MessageResponse> deleteMainOrderItemById(@PathVariable String id) {
         return new ResponseEntity<>(mainOrderItemService.deleteMainOrderItemById(id), HttpStatus.OK);
@@ -62,6 +66,7 @@ public class MainOrderItemController {
 
     @GetMapping
     @Operation(summary = "find all MainOrder by users principal", description = "List")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<List<MainOrderItemDto>> findAllMainOrderByUsers() {
         return new ResponseEntity<>(mainOrderItemService.findAllMainOrderByUsers()
                 .stream().map(mapperForDto::mainOrderItemToDto).toList(), HttpStatus.FOUND);
@@ -69,6 +74,7 @@ public class MainOrderItemController {
 
     @GetMapping("/filter")
     @Operation(summary = "filter all MainOrder by users principal", description = "Filters orders item based on the data")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<List<MainOrderItemDto>> findAllMainOrderItemsByUserAndFilter(@RequestParam(required = false) Double price,
                                                                                        @RequestParam(required = false) String before,
                                                                                        @RequestParam(required = false) String after,

@@ -16,6 +16,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -38,6 +39,7 @@ public class AdditionalOrderItemController {
             content = @Content(schema = @Schema(implementation = AdditionalItemDto.class)))
     @ApiResponse(responseCode = "400", description = "Invalid input")
     @PostMapping("/create")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<AdditionalItemDto> createAdditionalOrderItem(
             @Parameter(description = "Additional order item details", required = true)
             @Valid @RequestBody AdditionalOrderItemRequest additionalOrderItemRequest) {
@@ -51,6 +53,7 @@ public class AdditionalOrderItemController {
             content = @Content(schema = @Schema(implementation = AdditionalItemDto.class)))
     @ApiResponse(responseCode = "404", description = "Additional order item not found")
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<AdditionalItemDto> updateAdditionalOrderItem(
             @Parameter(description = "ID of the additional order item to update", required = true)
             @PathVariable String id,
@@ -68,6 +71,7 @@ public class AdditionalOrderItemController {
             content = @Content(schema = @Schema(implementation = MessageResponse.class)))
     @ApiResponse(responseCode = "404", description = "Additional order item not found")
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<MessageResponse> deleteAdditionalOrderItem(
             @Parameter(description = "ID of the additional order item to delete", required = true)
             @PathVariable String id) {

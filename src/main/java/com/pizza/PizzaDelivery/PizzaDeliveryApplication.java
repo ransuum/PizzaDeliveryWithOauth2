@@ -1,6 +1,6 @@
 package com.pizza.PizzaDelivery;
 
-import com.pizza.PizzaDelivery.security.RSA.RSAKeyRecord;
+import com.pizza.PizzaDelivery.entity.dto.security.RSA.RSAKeyRecord;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

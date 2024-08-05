@@ -1,4 +1,4 @@
-package com.pizza.PizzaDelivery.security;
+package com.pizza.PizzaDelivery.entity.dto.security;
 
 import com.pizza.PizzaDelivery.enums.TokenType;
 import com.pizza.PizzaDelivery.repo.RefreshTokenRepo;

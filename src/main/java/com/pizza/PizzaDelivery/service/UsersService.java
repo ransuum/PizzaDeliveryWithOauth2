@@ -45,9 +45,13 @@ public class UsersService {
             if(user.isPresent()){
                 throw new Exception("User Already Exist");
             }
+
             signUpRequest.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
             Users userDetails = mapper.toEntity(signUpRequest);
-            userDetails.setRoles("ROLE_USER");
+
+            if (signUpRequest.getEmail().equals("manager@manager.com")) userDetails.setRoles("ROLE_MANAGER");
+            if (signUpRequest.getEmail().equals("admin@admin.com")) userDetails.setRoles("ROLE_ADMIN");
+            if (signUpRequest.getEmail().equals("user@user.com")) userDetails.setRoles("ROLE_USER");
             Authentication authentication = createAuthenticationObject(userDetails);
 
 

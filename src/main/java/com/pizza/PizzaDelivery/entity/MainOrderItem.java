@@ -21,7 +21,7 @@ import java.util.List;
 @Data
 @Builder
 @Entity
-@Table(name = "main_order_item")
+@Table(name = "main_order_item_oauth")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class MainOrderItem {
     @Id

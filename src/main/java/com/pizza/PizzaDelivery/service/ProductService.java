@@ -53,4 +53,9 @@ public class ProductService {
         productRepo.deleteById(id);
         return id;
     }
+
+    public Product getProductById(String id) {
+        return productRepo.findById(id).orElseThrow(()
+                -> new NotFoundException("Product not found"));
+    }
 }

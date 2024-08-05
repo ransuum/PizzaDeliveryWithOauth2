@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 @Entity
-@org.springframework.data.relational.core.mapping.Table(name = "additional_item_order")
+@org.springframework.data.relational.core.mapping.Table(name = "additional_item_order_oauth")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class AdditionalOrderItem {
     @Id

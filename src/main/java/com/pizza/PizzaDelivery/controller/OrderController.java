@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,6 +38,7 @@ public class OrderController {
             content = @Content(schema = @Schema(implementation = OrderDto.class)))
     @ApiResponse(responseCode = "400", description = "Invalid input")
     @PostMapping("/create")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<OrderDto> createOrder(
             @Parameter(description = "Order details", required = true)
             @RequestBody @Valid OrderRequest orderRequest) {
@@ -48,6 +50,7 @@ public class OrderController {
             content = @Content(schema = @Schema(implementation = OrderDto.class)))
     @ApiResponse(responseCode = "404", description = "No orders found")
     @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<List<OrderDto>> getAllOrders() {
         return new ResponseEntity<>(orderService.getOrders().stream().map(orderMapper::orderToDto).toList(), HttpStatus.FOUND);
     }
@@ -57,6 +60,7 @@ public class OrderController {
             content = @Content(schema = @Schema(implementation = OrderDto.class)))
     @ApiResponse(responseCode = "404", description = "Order not found")
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<OrderDto> getOrderById(
             @Parameter(description = "ID of the order to retrieve", required = true)
             @PathVariable String id) {

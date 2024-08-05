@@ -70,7 +70,7 @@ public class JwtTokenGenerator {
             permissions.addAll(List.of("READ", "WRITE", "DELETE"));
         }
         if (roles.contains("ROLE_MANAGER")) {
-            permissions.add("READ");
+            permissions.addAll(List.of("READ", "WRITE", "DELETE"));
         }
         if (roles.contains("ROLE_USER")) {
             permissions.add("READ");
