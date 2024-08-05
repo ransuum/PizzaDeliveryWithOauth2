@@ -50,8 +50,9 @@ public class UsersService {
             Users userDetails = mapper.toEntity(signUpRequest);
 
             if (signUpRequest.getEmail().equals("manager@manager.com")) userDetails.setRoles("ROLE_MANAGER");
-            if (signUpRequest.getEmail().equals("admin@admin.com")) userDetails.setRoles("ROLE_ADMIN");
-            if (signUpRequest.getEmail().equals("user@user.com")) userDetails.setRoles("ROLE_USER");
+            else if (signUpRequest.getEmail().equals("admin@admin.com")) userDetails.setRoles("ROLE_ADMIN");
+            else userDetails.setRoles("ROLE_ADMIN");
+
             Authentication authentication = createAuthenticationObject(userDetails);
 
 
