@@ -1,4 +1,4 @@
-package com.pizza.PizzaDelivery.entity.dto.security.RSA;
+package com.pizza.PizzaDelivery.security.RSA;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

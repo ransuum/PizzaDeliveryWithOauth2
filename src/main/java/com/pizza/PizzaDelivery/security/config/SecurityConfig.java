@@ -1,4 +1,4 @@
-package com.pizza.PizzaDelivery.entity.dto.security.config;
+package com.pizza.PizzaDelivery.security.config;
 
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
@@ -6,13 +6,13 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
-import com.pizza.PizzaDelivery.entity.dto.security.JwtTokenUtils;
-import com.pizza.PizzaDelivery.entity.dto.security.LogoutHandlerService;
+import com.pizza.PizzaDelivery.security.JwtTokenUtils;
+import com.pizza.PizzaDelivery.security.LogoutHandlerService;
 import com.pizza.PizzaDelivery.entity.info.UserInfoManagerConfig;
 import com.pizza.PizzaDelivery.repo.RefreshTokenRepo;
-import com.pizza.PizzaDelivery.entity.dto.security.JwtAccessTokenFilter;
-import com.pizza.PizzaDelivery.entity.dto.security.RSA.RSAKeyRecord;
-import com.pizza.PizzaDelivery.entity.dto.security.filter.JwtRefreshTokenFilter;
+import com.pizza.PizzaDelivery.security.JwtAccessTokenFilter;
+import com.pizza.PizzaDelivery.security.RSA.RSAKeyRecord;
+import com.pizza.PizzaDelivery.security.filter.JwtRefreshTokenFilter;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

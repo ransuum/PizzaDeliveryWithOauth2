@@ -1,8 +1,7 @@
-package com.pizza.PizzaDelivery.entity.dto.security.filter;
+package com.pizza.PizzaDelivery.security;
 
-import com.pizza.PizzaDelivery.entity.dto.security.JwtTokenUtils;
-import com.pizza.PizzaDelivery.repo.RefreshTokenRepo;
-import com.pizza.PizzaDelivery.entity.dto.security.RSA.RSAKeyRecord;
+import com.pizza.PizzaDelivery.enums.TokenType;
+import com.pizza.PizzaDelivery.security.RSA.RSAKeyRecord;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,47 +26,38 @@ import java.io.IOException;
 
 @RequiredArgsConstructor
 @Slf4j
-public class JwtRefreshTokenFilter extends OncePerRequestFilter {
+public class JwtAccessTokenFilter extends OncePerRequestFilter {
 
-    private  final RSAKeyRecord rsaKeyRecord;
+    private final RSAKeyRecord rsaKeyRecord;
     private final JwtTokenUtils jwtTokenUtils;
-    private final RefreshTokenRepo refreshTokenRepo;
-
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        try {
-            log.info("[JwtRefreshTokenFilter:doFilterInternal] :: Started ");
+        try{
+            log.info("[JwtAccessTokenFilter:doFilterInternal] :: Started ");
 
-            log.info("[JwtRefreshTokenFilter:doFilterInternal]Filtering the Http Request:{}", request.getRequestURI());
-
+            log.info("[JwtAccessTokenFilter:doFilterInternal]Filtering the Http Request:{}",request.getRequestURI());
 
             final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-            JwtDecoder jwtDecoder = NimbusJwtDecoder.withPublicKey(rsaKeyRecord.rsaPublicKey()).build();
+            JwtDecoder jwtDecoder =  NimbusJwtDecoder.withPublicKey(rsaKeyRecord.rsaPublicKey()).build();
 
-            if (!authHeader.startsWith("Bearer ")) {
-                filterChain.doFilter(request, response);
+            if(!authHeader.startsWith(TokenType.Bearer.name())){
+                filterChain.doFilter(request,response);
                 return;
             }
 
             final String token = authHeader.substring(7);
-            final Jwt jwtRefreshToken = jwtDecoder.decode(token);
+            final Jwt jwtToken = jwtDecoder.decode(token);
 
+            final String userName = jwtTokenUtils.getUserName(jwtToken);
 
-            final String userName = jwtTokenUtils.getUserName(jwtRefreshToken);
-
-
-            if (!userName.isEmpty() && SecurityContextHolder.getContext().getAuthentication() == null) {
-                //Check if refreshToken isPresent in database and is valid
-                var isRefreshTokenValidInDatabase = refreshTokenRepo.findByRefreshToken(jwtRefreshToken.getTokenValue())
-                        .map(refreshTokenEntity -> !refreshTokenEntity.isRevoked())
-                        .orElse(false);
+            if(!userName.isEmpty() && SecurityContextHolder.getContext().getAuthentication() == null){
 
                 UserDetails userDetails = jwtTokenUtils.userDetails(userName);
-                if (jwtTokenUtils.isTokenValid(jwtRefreshToken, userDetails) && isRefreshTokenValidInDatabase) {
+                if(jwtTokenUtils.isTokenValid(jwtToken,userDetails)){
                     SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
 
                     UsernamePasswordAuthenticationToken createdToken = new UsernamePasswordAuthenticationToken(
@@ -75,16 +65,15 @@ public class JwtRefreshTokenFilter extends OncePerRequestFilter {
                             null,
                             userDetails.getAuthorities()
                     );
-
                     createdToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     securityContext.setAuthentication(createdToken);
                     SecurityContextHolder.setContext(securityContext);
                 }
             }
-            log.info("[JwtRefreshTokenFilter:doFilterInternal] Completed");
-            filterChain.doFilter(request, response);
+            log.info("[JwtAccessTokenFilter:doFilterInternal] Completed");
+            filterChain.doFilter(request,response);
         }catch (JwtValidationException jwtValidationException){
-            log.error("[JwtRefreshTokenFilter:doFilterInternal] Exception due to :{}",jwtValidationException.getMessage());
+            log.error("[JwtAccessTokenFilter:doFilterInternal] Exception due to :{}",jwtValidationException.getMessage());
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE,jwtValidationException.getMessage());
         }
     }

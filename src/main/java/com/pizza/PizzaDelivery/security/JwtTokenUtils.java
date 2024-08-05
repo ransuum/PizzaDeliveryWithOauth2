@@ -1,4 +1,4 @@
-package com.pizza.PizzaDelivery.entity.dto.security;
+package com.pizza.PizzaDelivery.security;
 
 import com.pizza.PizzaDelivery.entity.info.UserInfoConfig;
 import com.pizza.PizzaDelivery.repo.UsersRepo;
@@ -33,10 +33,10 @@ public class JwtTokenUtils {
 
     private final UsersRepo usersRepo;
 
-    public UserDetails userDetails(String emailId) {
+    public UserDetails userDetails(String email) {
         return usersRepo
-                .findUserByEmail(emailId)
+                .findUserByEmail(email)
                 .map(UserInfoConfig::new)
-                .orElseThrow(() -> new UsernameNotFoundException("UserEmail: " + emailId + " does not exist"));
+                .orElseThrow(() -> new UsernameNotFoundException("UserEmail: " + email + " does not exist"));
     }
 }
