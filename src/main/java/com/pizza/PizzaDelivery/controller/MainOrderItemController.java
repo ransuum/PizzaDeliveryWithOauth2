@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/main-order")
+@RequestMapping("/api/main-order")
 @Tag(name = "Order Management", description = "API for main order management")
 public class MainOrderItemController {
     private final MainOrderItemService mainOrderItemService;

@@ -2,6 +2,7 @@ package com.pizza.PizzaDelivery.mapper;
 
 import com.pizza.PizzaDelivery.entity.*;
 import com.pizza.PizzaDelivery.entity.dto.*;
+import com.pizza.PizzaDelivery.entity.request.SignUpRequest;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -30,6 +31,10 @@ public class MapperForDto {
 
     public AdditionalItemDto additionalItemToDto(AdditionalOrderItem additionalItem){
         return mapper.map(additionalItem, AdditionalItemDto.class);
+    }
+
+    public Users toEntity(SignUpRequest sign){
+        return mapper.map(sign, Users.class);
     }
 
 }

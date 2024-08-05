@@ -19,7 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/additional-item")
+@RequestMapping("/api/additional-item")
 @Tag(name = "Additional Order Management", description = "API for additional order management")
 public class AdditionalOrderItemController {
 

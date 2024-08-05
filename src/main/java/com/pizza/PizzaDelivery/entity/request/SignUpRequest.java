@@ -20,6 +20,9 @@ public class SignUpRequest {
     @Size(max = 40, message = "Email is too long")
     private String email;
 
+    @NotBlank(message = "username is blank")
+    private String username;
+
     @Valid
     @NotBlank(message = "Password is blank")
     @Size(min = 9, max = 30, message = "Password size should be from 9 to 30 characters")
