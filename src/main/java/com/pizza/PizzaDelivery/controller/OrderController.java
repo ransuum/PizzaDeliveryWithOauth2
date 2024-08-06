@@ -33,12 +33,8 @@ public class OrderController {
         this.orderMapper = orderMapper;
     }
 
-    @Operation(summary = "Create a new order", description = "Creates a new order based on the provided data")
-    @ApiResponse(responseCode = "201", description = "Order created successfully",
-            content = @Content(schema = @Schema(implementation = OrderDto.class)))
-    @ApiResponse(responseCode = "400", description = "Invalid input")
     @PostMapping("/create")
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN', 'ROLE_USER')")
+//    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<OrderDto> createOrder(
             @Parameter(description = "Order details", required = true)
             @RequestBody @Valid OrderRequest orderRequest) {
@@ -55,10 +51,6 @@ public class OrderController {
         return new ResponseEntity<>(orderService.getOrders().stream().map(orderMapper::orderToDto).toList(), HttpStatus.FOUND);
     }
 
-    @Operation(summary = "Get an order by ID", description = "Retrieves an order by its ID")
-    @ApiResponse(responseCode = "302", description = "Order found",
-            content = @Content(schema = @Schema(implementation = OrderDto.class)))
-    @ApiResponse(responseCode = "404", description = "Order not found")
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<OrderDto> getOrderById(
