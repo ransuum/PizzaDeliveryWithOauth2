@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -33,48 +34,32 @@ public class AdditionalOrderItemController {
         this.mapper = mapper;
     }
 
-    @Operation(summary = "Create an additional order item",
-            description = "Creates a new additional order item based on the provided data")
-    @ApiResponse(responseCode = "201", description = "Additional order item created successfully",
-            content = @Content(schema = @Schema(implementation = AdditionalItemDto.class)))
-    @ApiResponse(responseCode = "400", description = "Invalid input")
-    @PostMapping("/create")
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN', 'ROLE_USER')")
+    @PostMapping("/create")
     public ResponseEntity<AdditionalItemDto> createAdditionalOrderItem(
             @Parameter(description = "Additional order item details", required = true)
-            @Valid @RequestBody AdditionalOrderItemRequest additionalOrderItemRequest) {
+            @Valid @RequestBody AdditionalOrderItemRequest additionalOrderItemRequest, Authentication authentication) {
         return new ResponseEntity<>(mapper.additionalItemToDto(additionalOrderItemService
                 .createAdditionalOrderItem(additionalOrderItemRequest)), HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Update an additional order item",
-            description = "Updates an existing additional order item")
-    @ApiResponse(responseCode = "200", description = "Additional order item updated successfully",
-            content = @Content(schema = @Schema(implementation = AdditionalItemDto.class)))
-    @ApiResponse(responseCode = "404", description = "Additional order item not found")
-    @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN', 'ROLE_USER')")
+    @PutMapping("/{id}")
     public ResponseEntity<AdditionalItemDto> updateAdditionalOrderItem(
             @Parameter(description = "ID of the additional order item to update", required = true)
             @PathVariable String id,
             @Parameter(description = "ID of the new product (optional)")
             @RequestParam(required = false) String productId,
             @Parameter(description = "New quantity (optional)")
-            @RequestParam(required = false) Integer quantity) {
+            @RequestParam(required = false) Integer quantity, Authentication authentication) {
         return new ResponseEntity<>(mapper.additionalItemToDto(additionalOrderItemService
                 .updateAdditionalOrderItem(id, productId, quantity)), HttpStatus.OK);
     }
 
-    @Operation(summary = "Delete an additional order item",
-            description = "Deletes an existing additional order item")
-    @ApiResponse(responseCode = "200", description = "Additional order item deleted successfully",
-            content = @Content(schema = @Schema(implementation = MessageResponse.class)))
-    @ApiResponse(responseCode = "404", description = "Additional order item not found")
-    @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN', 'ROLE_USER')")
+    @DeleteMapping("/{id}")
     public ResponseEntity<MessageResponse> deleteAdditionalOrderItem(
-            @Parameter(description = "ID of the additional order item to delete", required = true)
-            @PathVariable String id) {
+            @PathVariable String id, Authentication authentication) {
         return new ResponseEntity<>(additionalOrderItemService.deleteAdditionalOrderItem(id), HttpStatus.OK);
     }
 }

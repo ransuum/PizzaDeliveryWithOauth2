@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,54 +34,45 @@ public class MainOrderItemController {
         this.mapperForDto = mapperForDto;
     }
 
-    @PostMapping("/create")
-    @Operation(summary = "Create an order item", description = "Creates a new order item based on the provided data")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "The order element was successfully created"),
-            @ApiResponse(responseCode = "400", description = "Invalid request"),
-            @ApiResponse(responseCode = "404", description = "Product or order not found")
-    })
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN', 'ROLE_USER')")
-    public ResponseEntity<MainOrderItemDto> create(@Valid @RequestBody MainOrderItemRequest mainOrderItemRequest) {
+    @PostMapping("/create")
+    public ResponseEntity<MainOrderItemDto> create(@Valid @RequestBody MainOrderItemRequest mainOrderItemRequest, Authentication authentication) {
         return new ResponseEntity<>(mapperForDto.mainOrderItemToDto(mainOrderItemService
                 .createMainOrderItem(mainOrderItemRequest)), HttpStatus.CREATED);
     }
 
-    @PutMapping
-    @Operation(summary = "Update an order item", description = "Updates an order item based on the provided data")
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN', 'ROLE_USER')")
+    @PutMapping
     public ResponseEntity<MainOrderItemDto> update(@RequestParam String id,
                                                    @RequestParam(required = false) String descr,
                                                    @RequestParam(required = false) String productId,
-                                                   @RequestParam(required = false) Integer quantity) {
+                                                   @RequestParam(required = false) Integer quantity, Authentication authentication) {
         return new ResponseEntity<>(mapperForDto.mainOrderItemToDto(mainOrderItemService
                 .updateMainOrderItem(id, descr, productId, quantity)), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN', 'ROLE_USER')")
-    @Operation(summary = "Delete an order item", description = "Deletes an order item based on the id")
-    public ResponseEntity<MessageResponse> deleteMainOrderItemById(@PathVariable String id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<MessageResponse> deleteMainOrderItemById(@PathVariable String id, Authentication authentication) {
         return new ResponseEntity<>(mainOrderItemService.deleteMainOrderItemById(id), HttpStatus.OK);
     }
 
-    @GetMapping
-    @Operation(summary = "find all MainOrder by users principal", description = "List")
     @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN', 'ROLE_USER')")
-    public ResponseEntity<List<MainOrderItemDto>> findAllMainOrderByUsers() {
+    @GetMapping
+    public ResponseEntity<List<MainOrderItemDto>> findAllMainOrderByUsers(Authentication authentication) {
         return new ResponseEntity<>(mainOrderItemService.findAllMainOrderByUsers()
                 .stream().map(mapperForDto::mainOrderItemToDto).toList(), HttpStatus.FOUND);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN', 'ROLE_USER')")
     @GetMapping("/filter")
     @Operation(summary = "filter all MainOrder by users principal", description = "Filters orders item based on the data")
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<List<MainOrderItemDto>> findAllMainOrderItemsByUserAndFilter(@RequestParam(required = false) Double price,
                                                                                        @RequestParam(required = false) String before,
                                                                                        @RequestParam(required = false) String after,
                                                                                        @RequestParam(required = false) String descr,
                                                                                        @RequestParam(required = false) String id,
-                                                                                       @RequestParam(required = false) String productId) {
+                                                                                       @RequestParam(required = false) String productId, Authentication authentication) {
         return new ResponseEntity<>(mainOrderItemService.findAllMainOrderItemsByUserAndFilter(price, before, after, descr, id, productId)
                 .stream().map(mapperForDto::mainOrderItemToDto).toList(), HttpStatus.FOUND);
     }

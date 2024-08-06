@@ -37,7 +37,7 @@ public class ProductController {
         return new ResponseEntity<>(mapper.productToDto(productService.createProduct(productRequest)), HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER' or 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<ProductDto> updateProduct(
             @PathVariable String id,
@@ -45,17 +45,16 @@ public class ProductController {
         return new ResponseEntity<>(mapper.productToDto(productService.updateProduct(id, productRequest)), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER' or 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteProduct(
-            @Parameter(description = "ID of the product to delete", required = true)
-            @PathVariable String id) {
+            @PathVariable String id, Authentication authentication) {
         return new ResponseEntity<>(productService.removeProduct(id), HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_MANAGER' or 'ROLE_ADMIN')")
     @GetMapping("/{id}")
-    public ResponseEntity<ProductDto> getProductById(@PathVariable String id) {
+    public ResponseEntity<ProductDto> getProductById(@PathVariable String id, Authentication authentication) {
         return new ResponseEntity<>(mapper.productToDto(productService.getProductById(id)), HttpStatus.FOUND);
     }
 }
