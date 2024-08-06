@@ -15,7 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/product")
@@ -30,17 +33,15 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<ProductDto> addProduct(
             @Parameter(description = "Product details", required = true)
-            @RequestBody ProductRequest productRequest) {
+            @RequestBody ProductRequest productRequest, Principal principal) {
         return new ResponseEntity<>(mapper.productToDto(productService.createProduct(productRequest)), HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_MANAGER' or 'ROLE_ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<ProductDto> updateProduct(
-            @Parameter(description = "ID of the product to update", required = true)
             @PathVariable String id,
-            @Parameter(description = "Updated product details", required = true)
-            @RequestBody ProductRequest productRequest) {
+            @RequestBody ProductRequest productRequest, Authentication authentication) {
         return new ResponseEntity<>(mapper.productToDto(productService.updateProduct(id, productRequest)), HttpStatus.OK);
     }
 
