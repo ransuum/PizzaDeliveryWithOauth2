@@ -51,10 +51,9 @@ public class UsersService {
 
             if (signUpRequest.getEmail().equals("manager@manager.com")) userDetails.setRoles("ROLE_MANAGER");
             else if (signUpRequest.getEmail().equals("admin@admin.com")) userDetails.setRoles("ROLE_ADMIN");
-            else userDetails.setRoles("ROLE_ADMIN");
+            else userDetails.setRoles("ROLE_USER");
 
             Authentication authentication = createAuthenticationObject(userDetails);
-
 
             // Generate a JWT token
             String accessToken = jwtTokenGenerator.generateAccessToken(authentication);

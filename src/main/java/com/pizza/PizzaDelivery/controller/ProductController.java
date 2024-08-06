@@ -44,7 +44,7 @@ public class ProductController {
     @ApiResponse(responseCode = "404", description = "Product not found")
     @ApiResponse(responseCode = "400", description = "Invalid input")
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER' or 'ROLE_ADMIN')")
     public ResponseEntity<ProductDto> updateProduct(
             @Parameter(description = "ID of the product to update", required = true)
             @PathVariable String id,
@@ -58,7 +58,7 @@ public class ProductController {
             content = @Content(schema = @Schema(implementation = String.class)))
     @ApiResponse(responseCode = "404", description = "Product not found")
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER' or 'ROLE_ADMIN')")
     public ResponseEntity<String> deleteProduct(
             @Parameter(description = "ID of the product to delete", required = true)
             @PathVariable String id) {
@@ -70,7 +70,7 @@ public class ProductController {
             content = @Content(schema = @Schema(implementation = ProductDto.class)))
     @ApiResponse(responseCode = "404", description = "Product not found")
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER' or 'ROLE_ADMIN')")
     public ResponseEntity<ProductDto> getProductById(@PathVariable String id) {
         return new ResponseEntity<>(mapper.productToDto(productService.getProductById(id)), HttpStatus.FOUND);
     }
