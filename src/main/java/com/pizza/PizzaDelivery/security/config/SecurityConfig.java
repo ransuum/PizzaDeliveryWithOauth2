@@ -44,7 +44,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableMethodSecurity
 @RequiredArgsConstructor
 @Slf4j
-public class SecurityConfig  {
+public class SecurityConfig {
 
     private final UserInfoManagerConfig userInfoManagerConfig;
     private final RSAKeyRecord rsaKeyRecord;
@@ -54,9 +54,10 @@ public class SecurityConfig  {
 
     @Order(1)
     @Bean
-    public SecurityFilterChain signInSecurityFilterChain(HttpSecurity httpSecurity) throws Exception{
+    public SecurityFilterChain signInSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .securityMatcher(new AntPathRequestMatcher("/sign-in/**"))
+                .securityMatcher(new AntPathRequestMatcher("/swagger-ui/sign-in/**"))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
                 .userDetailsService(userInfoManagerConfig)
@@ -71,9 +72,10 @@ public class SecurityConfig  {
 
     @Order(2)
     @Bean
-    public SecurityFilterChain apiSecurityFilterChain(HttpSecurity httpSecurity) throws Exception{
+    public SecurityFilterChain apiSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .securityMatcher(new AntPathRequestMatcher("/api/**"))
+                .securityMatcher(new AntPathRequestMatcher("/swagger-ui/api/**"))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))
@@ -88,14 +90,14 @@ public class SecurityConfig  {
 
     @Order(3)
     @Bean
-    public SecurityFilterChain refreshTokenSecurityFilterChain(HttpSecurity httpSecurity) throws Exception{
+    public SecurityFilterChain refreshTokenSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .securityMatcher(new AntPathRequestMatcher("/refresh-token/**"))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(new JwtRefreshTokenFilter(rsaKeyRecord,jwtTokenUtils,refreshTokenRepo), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtRefreshTokenFilter(rsaKeyRecord, jwtTokenUtils, refreshTokenRepo), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(ex -> {
                     ex.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint());
                     ex.accessDeniedHandler(new BearerTokenAccessDeniedHandler());
@@ -109,18 +111,19 @@ public class SecurityConfig  {
     public SecurityFilterChain logoutSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .securityMatcher(new AntPathRequestMatcher("/logout/**"))
+                .securityMatcher(new AntPathRequestMatcher("/swagger-ui/logout/**"))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(new JwtAccessTokenFilter(rsaKeyRecord,jwtTokenUtils), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAccessTokenFilter(rsaKeyRecord, jwtTokenUtils), UsernamePasswordAuthenticationFilter.class)
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .addLogoutHandler(logoutHandlerService)
                         .logoutSuccessHandler(((request, response, authentication) -> SecurityContextHolder.clearContext()))
                 )
                 .exceptionHandling(ex -> {
-                    log.error("[SecurityConfig:logoutSecurityFilterChain] Exception due to :{}",ex);
+                    log.error("[SecurityConfig:logoutSecurityFilterChain] Exception due to :{}", ex);
                     ex.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint());
                     ex.accessDeniedHandler(new BearerTokenAccessDeniedHandler());
                 })
@@ -129,9 +132,10 @@ public class SecurityConfig  {
 
     @Order(5)
     @Bean
-    public SecurityFilterChain registerSecurityFilterChain(HttpSecurity httpSecurity) throws Exception{
+    public SecurityFilterChain registerSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .securityMatcher(new AntPathRequestMatcher("/sign-up/**"))
+                .securityMatcher(new AntPathRequestMatcher("/swagger-ui/sign-up/**"))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
                         auth.anyRequest().permitAll())
@@ -140,14 +144,14 @@ public class SecurityConfig  {
     }
 
     @Bean
-    JwtEncoder jwtEncoder(){
+    JwtEncoder jwtEncoder() {
         JWK jwk = new RSAKey.Builder(rsaKeyRecord.rsaPublicKey()).privateKey(rsaKeyRecord.rsaPrivateKey()).build();
         JWKSource<SecurityContext> jwkSource = new ImmutableJWKSet<>(new JWKSet(jwk));
         return new NimbusJwtEncoder(jwkSource);
     }
 
     @Bean
-    JwtDecoder jwtDecoder(){
+    JwtDecoder jwtDecoder() {
         return NimbusJwtDecoder.withPublicKey(rsaKeyRecord.rsaPublicKey()).build();
     }
 

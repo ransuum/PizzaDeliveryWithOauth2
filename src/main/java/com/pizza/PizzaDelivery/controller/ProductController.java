@@ -31,7 +31,7 @@ public class ProductController {
             content = @Content(schema = @Schema(implementation = ProductDto.class)))
     @ApiResponse(responseCode = "400", description = "Invalid input")
     @PostMapping
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ProductDto> addProduct(
             @Parameter(description = "Product details", required = true)
             @RequestBody ProductRequest productRequest) {
