@@ -11,6 +11,7 @@ import com.pizza.PizzaDelivery.exception.NotFoundException;
 import com.pizza.PizzaDelivery.repo.MainOrderItemRepo;
 import com.pizza.PizzaDelivery.repo.OrderRepo;
 import com.pizza.PizzaDelivery.repo.ProductRepo;
+import com.pizza.PizzaDelivery.repo.UsersRepo;
 import com.pizza.PizzaDelivery.util.Price;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -29,18 +30,20 @@ public class MainOrderItemService {
     private final OrderRepo orderRepo;
     private final Price pizza;
     private final ProductRepo productRepo;
+    private final UsersRepo usersRepo;
 
     @Autowired
-    public MainOrderItemService(MainOrderItemRepo mainOrderItemRepo, OrderRepo orderRepo, ProductRepo productRepo, Price pizza) {
+    public MainOrderItemService(MainOrderItemRepo mainOrderItemRepo, OrderRepo orderRepo, ProductRepo productRepo, Price pizza, UsersRepo usersRepo) {
         this.mainOrderItemRepo = mainOrderItemRepo;
         this.orderRepo = orderRepo;
         this.productRepo = productRepo;
         this.pizza = pizza;
+        this.usersRepo = usersRepo;
     }
 
     public MainOrderItem createMainOrderItem(MainOrderItemRequest mainOrderItemRequest) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Users users = (Users) authentication.getPrincipal();
+        Users users = usersRepo.findUserByEmail(authentication.getName()).orElseThrow();
 
         Product product = productRepo.findById(mainOrderItemRequest.getProductId()).orElseThrow(() -> new NotFoundException("Product not found"));
 

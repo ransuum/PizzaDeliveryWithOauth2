@@ -7,6 +7,7 @@ import com.pizza.PizzaDelivery.enums.PayStatus;
 import com.pizza.PizzaDelivery.exception.NotFoundException;
 import com.pizza.PizzaDelivery.mapper.MapperForDto;
 import com.pizza.PizzaDelivery.repo.OrderRepo;
+import com.pizza.PizzaDelivery.repo.UsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
@@ -20,16 +21,19 @@ import java.util.List;
 public class OrderService {
     private final OrderRepo orderRepo;
     private final MapperForDto mapper;
+    private final UsersRepo usersRepo;
 
     @Autowired
-    public OrderService(OrderRepo orderRepo, MapperForDto mapper) {
+    public OrderService(OrderRepo orderRepo, MapperForDto mapper, UsersRepo usersRepo) {
         this.orderRepo = orderRepo;
         this.mapper = mapper;
+        this.usersRepo = usersRepo;
     }
 
     public Orders createOrder(OrderRequest orderRequest) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Users user = (Users) authentication.getPrincipal();
+        Users user = usersRepo.findUserByEmail(authentication.getName()).orElseThrow();
+
 
         Orders orders = Orders.builder()
                 .createdAt(LocalDateTime.now())
